@@ -169,6 +169,17 @@ Once:
 Open the LoadBalancer URL in your browser to access your application.
 
 ---
+In case of any issues,
+
+kubectl edit configmap aws-auth -n kube-system
+
+Add this under maproles:
+```  
+  - rolearn: arn:aws:iam::350732689609:role/github-actions-eks-deployer
+    username: github-actions
+    groups:
+      - system:masters 
+ ```
 
 # ✅ Deployment Complete
 
