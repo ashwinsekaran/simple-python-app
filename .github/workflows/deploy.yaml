@@ -25,7 +25,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-actions-eks-deployer
+          role-to-assume: arn:aws:iam::350732689609:role/github-actions-eks-deployer
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to ECR
@@ -33,7 +33,7 @@ jobs:
           aws ecr get-login-password \
           | docker login \
           --username AWS \
-          --password-stdin <ACCOUNT_ID>.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          --password-stdin 350732689609.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
       - name: Build Docker image
         run: |
@@ -43,12 +43,12 @@ jobs:
       - name: Tag Docker image
         run: |
           docker tag $ECR_REPOSITORY:${{ github.sha }} \
-          <ACCOUNT_ID>.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
+          350732689609.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
 
       - name: Push image
         run: |
           docker push \
-          <ACCOUNT_ID>.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
+          350732689609.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
 
       - name: Update kubeconfig
         run: |
@@ -59,4 +59,4 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/simple-python-app \
-          simple-python-app=<ACCOUNT_ID>.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
+          simple-python-app=350732689609.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
